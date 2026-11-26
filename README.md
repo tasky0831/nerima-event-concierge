@@ -1,4 +1,4 @@
-# 練馬・車お出かけ イベントコンシェルジュ
+# 近所のイベントコンシェルジュ
 
 Google Apps Script（GAS）のWebアプリURLからイベントデータをJSON形式で取得し、iPhoneのSafariから快適に閲覧・絞り込みができるStreamlit Webアプリです。
 

@@ -5,11 +5,13 @@ import requests
 import streamlit as st
 
 st.set_page_config(
-    page_title="練馬・車お出かけ イベントコンシェルジュ",
-    page_icon="🚗",
+    page_title="近所のイベントコンシェルジュ",
+    page_icon="📍",
     layout="centered",
     initial_sidebar_state="collapsed",
 )
+
+APP_TITLE = "近所のイベントコンシェルジュ"
 
 EXPECTED_KEYS = [
     "event_id",
@@ -26,12 +28,20 @@ EXPECTED_KEYS = [
 CATEGORIES = ["商業施設", "公園・自然", "テーマパーク", "地域・グルメ"]
 
 
+def render_app_title() -> None:
+    """アプリタイトルを通常の約2/3サイズで表示する。"""
+    st.markdown(
+        f'<h1 style="font-size: 1.5rem; font-weight: 700; line-height: 1.3; margin: 0 0 0.5rem 0;">{html.escape(APP_TITLE)}</h1>',
+        unsafe_allow_html=True,
+    )
+
+
 def check_authentication() -> bool:
     """簡易パスワード認証を行い、認証済みならTrueを返す。"""
     if st.session_state.get("authenticated", False):
         return True
 
-    st.title("🚗 練馬・車お出かけ イベントコンシェルジュ")
+    render_app_title()
     st.caption("閲覧するにはパスワードを入力してください。")
 
     try:
@@ -120,7 +130,7 @@ def main() -> None:
     if not check_authentication():
         st.stop()
 
-    st.title("🚗 練馬・車お出かけ イベントコンシェルジュ")
+    render_app_title()
 
     if st.button("🔄 最新情報に更新", use_container_width=True):
         fetch_events.clear()
@@ -217,7 +227,11 @@ def main() -> None:
     for _, row in filtered.iterrows():
         with st.container(border=True):
             render_badges(row["area_type"], row["category"])
-            st.markdown(f"### {row['title'] or '（タイトルなし）'}")
+            event_title = html.escape(row["title"] or "（タイトルなし）")
+            st.markdown(
+                f'<h3 style="font-size: 1.15rem; font-weight: 700; line-height: 1.35; margin: 0.25rem 0 0.5rem 0;">{event_title}</h3>',
+                unsafe_allow_html=True,
+            )
 
             st.markdown(
                 f"- **開催日時**：{row['event_date'] or '未定'}\n"
