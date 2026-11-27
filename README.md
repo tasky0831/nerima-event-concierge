@@ -9,12 +9,18 @@ Google Apps Script（GAS）のWebアプリURLからイベントデータをJSON�
 - `.gitignore`：機密情報（`.streamlit/secrets.toml`）やキャッシュ（`__pycache__/`）を除外
 - `README.md`：セットアップおよびデプロイ手順
 
+## 主な機能
+
+- **簡易パスワード認証**：`st.secrets["APP_PASSWORD"]` によるログイン保護
+- **NEW表示＆更新日時表示**：`added_date` が直近3日以内のイベントに `NEW` バッジを付与し、カード上に更新日時を表示
+- **絞り込み＆ソート**：エリア区分（`近所` / `電車` / `車お出かけ`）、カテゴリ、予約条件、キーワード検索に加え、更新日時順・駅順での並び替えに対応
+
 ## GASから返却するJSON仕様
 
 `GAS_API_URL` へのGETリクエストで、以下のキーを持つオブジェクトの配列（JSON配列）を返すように構成してください。
 
 - `event_id`
-- `area_type`（例：`近所` / `車お出かけ`）
+- `area_type`（例：`近所` / `電車` / `車お出かけ`）
 - `category`（例：`商業施設` / `公園・自然` / `テーマパーク` / `地域・グルメ`）
 - `title`
 - `event_date`
@@ -22,6 +28,7 @@ Google Apps Script（GAS）のWebアプリURLからイベントデータをJSON�
 - `booking_info`
 - `baby_point`
 - `source_url`
+- `added_date`（例：`2026-11-27` または ISO8601形式）
 
 ## Streamlit Community Cloud でのデプロイ手順
 
