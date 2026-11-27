@@ -175,22 +175,16 @@ def render_badges(area_type: str, category: str, is_new: bool) -> None:
             ' letter-spacing:0.04em;">NEW</span>'
         )
 
-    st.markdown(
-        f"""
-        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:4px;">
-            {new_badge_html}
-            <span style="background:{area_bg}; color:{area_fg}; padding:3px 10px;
-                         border-radius:999px; font-size:0.8rem; font-weight:600;">
-                {area_escaped}
-            </span>
-            <span style="background:#F3F4F6; color:#374151; padding:3px 10px;
-                         border-radius:999px; font-size:0.8rem; font-weight:600;">
-                {cat_escaped}
-            </span>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    badges_html = "".join(
+        [
+            '<div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:4px;">',
+            new_badge_html,
+            f'<span style="background:{area_bg}; color:{area_fg}; padding:3px 10px; border-radius:999px; font-size:0.8rem; font-weight:600;">{area_escaped}</span>',
+            f'<span style="background:#F3F4F6; color:#374151; padding:3px 10px; border-radius:999px; font-size:0.8rem; font-weight:600;">{cat_escaped}</span>',
+            "</div>",
+        ]
     )
+    st.markdown(badges_html, unsafe_allow_html=True)
 
 
 def main() -> None:
