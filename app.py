@@ -81,7 +81,13 @@ def parse_added_datetime(value: str) -> pd.Timestamp:
     if not raw:
         return pd.NaT
 
-    ts = pd.to_datetime(raw, errors="coerce")
+    # JavaScript Date.toString() 形式: "Thu Nov 26 2026 00:00:00 GMT+0900 (Japan Standard Time)"
+    cleaned = re.sub(r"\s*\([^)]*\)\s*$", "", raw).strip()
+    cleaned = re.sub(r"\bGMT([+-]\d{4})\b", r"\1", cleaned)
+
+    ts = pd.to_datetime(cleaned, errors="coerce")
+    if pd.isna(ts):
+        ts = pd.to_datetime(raw, errors="coerce")
     if pd.isna(ts):
         return pd.NaT
 
