@@ -91,12 +91,10 @@ def parse_added_datetime(value: str) -> pd.Timestamp:
 
 
 def format_added_date(raw_value: str, parsed_ts: pd.Timestamp) -> str:
-    """画面表示用の更新日時文字列を返す。"""
+    """画面表示用の更新日文字列（YYYY/MM/DD）を返す。"""
     if pd.isna(parsed_ts):
         return raw_value.strip() if raw_value.strip() else "記載なし"
-    if parsed_ts.hour == 0 and parsed_ts.minute == 0 and parsed_ts.second == 0:
-        return parsed_ts.strftime("%Y/%m/%d")
-    return parsed_ts.strftime("%Y/%m/%d %H:%M")
+    return parsed_ts.strftime("%Y/%m/%d")
 
 
 def is_new_event(parsed_ts: pd.Timestamp, today_jst) -> bool:
@@ -269,8 +267,8 @@ def main() -> None:
         sort_option = st.selectbox(
             "並び替え",
             options=[
-                "更新日時（新しい順）",
-                "更新日時（古い順）",
+                "更新日（新しい順）",
+                "更新日（古い順）",
                 "駅順",
                 "標準（データ順）",
             ],
@@ -301,11 +299,11 @@ def main() -> None:
         )
         filtered = filtered[mask]
 
-    if sort_option == "更新日時（新しい順）":
+    if sort_option == "更新日（新しい順）":
         filtered = filtered.sort_values(
             by="_added_ts", ascending=False, na_position="last", kind="mergesort"
         )
-    elif sort_option == "更新日時（古い順）":
+    elif sort_option == "更新日（古い順）":
         filtered = filtered.sort_values(
             by="_added_ts", ascending=True, na_position="last", kind="mergesort"
         )
@@ -345,7 +343,7 @@ def main() -> None:
                 f"- **開催日時**：{row['event_date'] or '未定'}\n"
                 f"- **場所**：{row['location'] or '未定'}\n"
                 f"- **予約情報**：{row['booking_info'] or '記載なし'}\n"
-                f"- **更新日時**：{row['_added_display']}"
+                f"- **更新日**：{row['_added_display']}"
             )
 
             if row["baby_point"]:
